@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>AmourVault | Luxury Digital Gift Experience</title>
+  <!-- Google Fonts & Smooth Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none; /* subtle luxury feel, but text selectable */
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 10% 30%, #1a0b1a, #110511);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #fbe9f0;
+    }
+
+    /* floating hearts canvas */
+    .heart-float-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+
+    .floating-heart {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0.6;
+      animation: floatUpLove 8s linear forwards;
+      filter: drop-shadow(0 0 4px rgba(255, 80, 120, 0.5));
+      pointer-events: none;
+    }
+
+    @keyframes floatUpLove {
+      0% {
+        transform: translateY(100vh) scale(0.6);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.8;
+      }
+      85% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-20vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* main layout */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 4rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* lock screen (scan simulation) */
+    .lock-screen {
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      transition: all 0.5s ease;
+    }
+
+    .premium-card {
+      background: rgba(30, 15, 25, 0.65);
+      backdrop-filter: blur(12px);
+      border-radius: 64px;
+      padding: 2.5rem 2rem;
+      width: 90%;
+      max-width: 520px;
+      border: 1px solid rgba(255, 215, 200, 0.35);
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 180, 160, 0.2) inset;
+      transition: transform 0.3s ease;
+    }
+
+    .qr-mockup {
+      background: white;
+      padding: 20px;
+      border-radius: 32px;
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+
+    .qr-mockup i {
+      font-size: 8rem;
+      color: #250e1a;
+    }
+
+    .scan-btn {
+      background: linear-gradient(135deg, #e6b0b0, #c97b84);
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      border-radius: 60px;
+      color: #2c0f1a;
+      margin-top: 28px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+      letter-spacing: 1px;
+      backdrop-filter: blur(4px);
+    }
+
+    .scan-btn:hover {
+      transform: scale(1.02);
+      background: linear-gradient(135deg, #ffc2c2, #e28f99);
+      box-shadow: 0 15px 25px rgba(220, 80, 100, 0.4);
+    }
+
+    /* UNLOCKED EXPERIENCE (hidden initially) */
+    .unlocked-experience {
+      display: none;
+      animation: cinematicReveal 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+    }
+
+    @keyframes cinematicReveal {
+      0% {
+        opacity: 0;
+        transform: scale(0.97);
+        filter: blur(5px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+    }
+
+    /* romantic hero section */
+    .hero-message {
+      text-align: center;
+      margin: 2rem 0 3rem;
+    }
+    .personalized-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      background: linear-gradient(135deg, #FFDFD3, #FFB7B2);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 15px rgba(255,120,130,0.3);
+    }
+    .love-message-text {
+      font-size: 1.25rem;
+      margin-top: 1rem;
+      font-weight: 300;
+      background: rgba(0,0,0,0.3);
+      display: inline-block;
+      padding: 0.5rem 2rem;
+      border-radius: 80px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* photo gallery */
+    .gallery-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin: 2rem 0 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .gallery-item {
+      border-radius: 32px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+      transition: transform 0.4s, box-shadow 0.4s;
+      cursor: pointer;
+      border: 1px solid rgba(255,200,190,0.4);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 30px 40px -10px #ff8c8c30;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+
+    /* Animated love notes */
+    .love-notes-area {
+      background: rgba(25, 12, 20, 0.55);
+      backdrop-filter: blur(8px);
+      border-radius: 64px;
+      padding: 2rem 1rem;
+      margin: 2rem 0;
+      border: 1px solid rgba(255,210,190,0.4);
+      text-align: center;
+    }
+    .love-note-slider {
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-style: italic;
+      font-weight: 400;
+      font-family: 'Playfair Display', serif;
+      color: #ffeae3;
+      transition: all 0.5s;
+    }
+    .love-note-slider span {
+      display: inline-block;
+      animation: gentlePulse 2s infinite;
+    }
+    @keyframes gentlePulse {
+      0% { text-shadow: 0 0 0px rgba(255,210,180,0);}
+      50% { text-shadow: 0 0 12px rgba(255,150,140,0.7);}
+      100% { text-shadow: 0 0 0px rgba(255,210,180,0);}
+    }
+
+    /* packaging & mockup row */
+    .concept-showcase {
+      margin-top: 3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+    .mockup-card {
+      background: rgba(20, 8, 15, 0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 40px;
+      padding: 1.5rem;
+      flex: 1;
+      min-width: 240px;
+      text-align: center;
+      border: 1px solid rgba(255,180,150,0.5);
+      transition: all 0.4s;
+    }
+    .mockup-card i {
+      font-size: 3rem;
+      color: #e6aaae;
+      margin-bottom: 1rem;
+    }
+    .mockup-card h3 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 0.75rem;
+    }
+    .btn-unbox-tip {
+      background: none;
+      border: 1px solid #ffaa99;
+      color: #ffddcc;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-unbox-tip:hover {
+      background: #ffaa9940;
+    }
+
+    /* music player */
+    .music-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
+      padding: 12px 18px;
+      border-radius: 60px;
+      z-index: 40;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid rgba(255,200,180,0.5);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    .music-widget i {
+      font-size: 1.8rem;
+      color: #ffbcb0;
+    }
+
+    /* responsive */
+    @media (max-width: 680px) {
+      .personalized-name { font-size: 2rem; }
+      .love-note-slider { font-size: 1.2rem; }
+      .premium-card { padding: 1.8rem; }
+    }
+
+    /* glowing gradients */
+    .glow-text {
+      text-shadow: 0 0 8px #ff8090;
+    }
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      opacity: 0.6;
+      font-size: 0.8rem;
+    }
+    hr {
+      border-color: #ffc0b060;
+      margin: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="heart-float-container" id="heartContainer"></div>
+
+<div class="container">
+  <!-- LOCK SCREEN (QR scanning simulation + romantic card) -->
+  <div id="lockScreen" class="lock-screen">
+    <div class="premium-card">
+      <i class="fas fa-gem" style="font-size: 2.8rem; color: #f7bfbe; margin-bottom: 10px;"></i>
+      <h1 style="font-family: 'Playfair Display'; font-weight: 600; font-size: 2rem;">Luxury Digital Gift</h1>
+      <div class="qr-mockup">
+        <i class="fas fa-qrcode" style="color: #4a1e2f;"></i>
+      </div>
+      <p style="margin-top: 0.5rem; font-weight: 300;">Scan the QR code on your <br> premium printed card</p>
+      <button class="scan-btn" id="simulateScanBtn"><i class="fas fa-camera"></i>   Scan & Unlock Memory</button>
+      <p style="margin-top: 20px; font-size: 0.75rem; opacity: 0.7;">✨ Exclusive for you ✨</p>
+    </div>
+    <!-- packaging teaser below lock screen but still romantic -->
+    <div style="margin-top: 40px; width: 100%; text-align: center;">
+      <p style="font-size: 0.9rem; letter-spacing: 3px;">✦ LUXURY UNBOXING CONCEPT ✦</p>
+    </div>
+  </div>
+
+  <!-- MAIN UNLOCKED EXPERIENCE (hidden at first) -->
+  <div id="unlockedContent" class="unlocked-experience">
+    <!-- Personalized hero -->
+    <div class="hero-message">
+      <div class="personalized-name" id="recipientNameDisplay">My Eternal Love, Isabella</div>
+      <div class="love-message-text" id="personalizedQuote">Every heartbeat writes your name into my soul. ✨</div>
+    </div>
+
+    <!-- Photo Gallery -->
+    <div class="gallery-title"><i class="fas fa-images"></i>  Our Treasured Gallery</div>
+    <div class="photo-grid" id="photoGallery">
+      <!-- will be filled with romantic images via JS for consistency -->
+    </div>
+
+    <!-- Animated love notes -->
+    <div class="love-notes-area">
+      <div class="love-note-slider" id="animatedLoveNote">❤️  You are my greatest adventure  ❤️</div>
+    </div>
+
+    <!-- Packaging Mockup + printed card concepts + Unboxing ideas -->
+    <div class="concept-showcase">
+      <div class="mockup-card">
+        <i class="fas fa-gift"></i>
+        <h3>Velvet Box Mockup</h3>
+        <p>Premium rigid box with rose-gold foil & satin lining — embossed with initials.</p>
+        <button class="btn-unbox-tip" id="revealUnboxTip1"><i class="fas fa-magic"></i> Reveal unboxing idea</button>
+        <div id="unboxHint1" style="margin-top: 12px; font-size: 0.8rem; display: none;">✨ Slowly lift the ribbon, unveil a hidden compartment with a handwritten love letter inside. ✨</div>
+      </div>
+      <div class="mockup-card">
+        <i class="fas fa-id-card"></i>
+        <h3>Printed Card Concept</h3>
+        <p>Matte premium pearl paper, gold hot-stamped QR code + wax seal "Amour".</p>
+        <button class="btn-unbox-tip" id="revealUnboxTip2"><i class="fas fa-qrcode"></i> Unwrap digital surprise</button>
+        <div id="unboxHint2" style="margin-top: 12px; font-size: 0.8rem; display: none;">💌 Pair with dried rose petals & a small lock — the QR reveals a private video message. 💌</div>
+      </div>
+      <div class="mockup-card">
+        <i class="fas fa-film"></i>
+        <h3>Romantic Reveal Animation</h3>
+        <p>Cinematic particle explosion when scanning the QR — confetti hearts & golden shimmer.</p>
+        <button class="btn-unbox-tip" id="revealUnboxTip3"><i class="fas fa-heart"></i> See unboxing ritual</button>
+        <div id="unboxHint3" style="margin-top: 12px; font-size: 0.8rem; display: none;">🎁 Unfolding layers: silk ribbon pull → starry projection → digital love letter appears on screen. 🎁</div>
+      </div>
+    </div>
+    <footer>
+      <i class="fas fa-heart" style="color: #ff9b9b;"></i>  crafted with endless love — timeless keepsake
+    </footer>
+  </div>
+</div>
+
+<!-- music widget -->
+<div class="music-widget" id="musicToggle">
+  <i class="fas fa-music" id="musicIcon"></i>
+  <span id="musicStatus">Play Romance</span>
+</div>
+
+<script>
+  // ---------- ROMANTIC DATA ----------
+  const recipient = "Isabella";   // personalized message
+  const customMsg = "You are the poetry my heart never knew it needed. Every day with you is a masterpiece. Happy Anniversary, my forever.";
+  document.getElementById("recipientNameDisplay").innerHTML = `My Dearest ${recipient} ❤️`;
+  document.getElementById("personalizedQuote").innerHTML = customMsg;
+
+  // romantic photo gallery (premium stock - romantic moments)
+  const galleryImages = [
+    "https://images.unsplash.com/photo-1516589091380-5d8e87c6999d?w=600&h=600&fit=crop", // couple embrace
+    "https://images.unsplash.com/photo-1522673607200-64737a1cd2f9?w=600&h=600&fit=crop", // sunset hands
+    "https://images.unsplash.com/photo-1530103862676-de3c5117f64a?w=600&h=600&fit=crop", // roses bouquet
+    "https://images.unsplash.com/photo-1519742866993-66d6db260e48?w=600&h=600&fit=crop", // romantic walk
+    "https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=600&h=600&fit=crop", // candlelit dinner
+    "https://images.unsplash.com/photo-1516486981213-d7d36b7bf58a?w=600&h=600&fit=crop"  // picnic romance
+  ];
+  
+  const galleryContainer = document.getElementById("photoGallery");
+  if (galleryContainer) {
+    galleryImages.forEach(src => {
+      const col = document.createElement("div");
+      col.className = "gallery-item";
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "romantic memory";
+      img.loading = "lazy";
+      col.appendChild(img);
+      galleryContainer.appendChild(col);
+    });
+  }
+
+  // animated love notes array - infinite rotation
+  const loveQuotes = [
+    "✨ You are the light that guides me home ✨",
+    "🌹 Every love song reminds me of your smile 🌹",
+    "💫 In a sea of people, my eyes will always search for you 💫",
+    "🍂 Forever begins the moment I met you 🍂",
+    "💖 Your love is the greatest luxury I own 💖",
+    "🕯️ You make my world glow with magic 🕯️",
+    "🌙 Every night I dream of your embrace 🌙"
+  ];
+  let noteIndex = 0;
+  const noteElement = document.getElementById("animatedLoveNote");
+  function rotateLoveNotes() {
+    if (!noteElement) return;
+    noteIndex = (noteIndex + 1) % loveQuotes.length;
+    noteElement.innerHTML = `❤️  ${loveQuotes[noteIndex]}  🩷`;
+    noteElement.style.opacity = "0";
+    setTimeout(() => { if(noteElement) noteElement.style.opacity = "1"; }, 80);
+    // small shimmer effect
+    noteElement.style.transform = "scale(1.02)";
+    setTimeout(() => { if(noteElement) noteElement.style.transform = "scale(1)"; }, 200);
+  }
+  setInterval(rotateLoveNotes, 4500);
+
+  // ---------- HEART GENERATOR (floating hearts unlimited) ----------
+  function createFloatingHeart() {
+    const heartContainer = document.getElementById("heartContainer");
+    if (!heartContainer) return;
+    const heart = document.createElement("div");
+    heart.classList.add("floating-heart");
+    const heartsArray = ['❤️', '🩷', '❤️‍🩹', '💖', '💗', '❤️‍🔥', '🌸'];
+    heart.innerHTML = heartsArray[Math.floor(Math.random() * heartsArray.length)];
+    const size = Math.random() * 24 + 16; // 16px to 40px
+    heart.style.fontSize = size + "px";
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.animationDuration = Math.random() * 5 + 6 + "s";
+    heart.style.animationDelay = Math.random() * 5 + "s";
+    heart.style.opacity = Math.random() * 0.7 + 0.3;
+    heartContainer.appendChild(heart);
+    setTimeout(() => {
+      heart.remove();
+    }, 12000);
+  }
+  let heartInterval;
+  function startHearts() {
+    if (heartInterval) clearInterval(heartInterval);
+    heartInterval = setInterval(createFloatingHeart, 700);
+    // initial burst
+    for(let i=0;i<12;i++) setTimeout(createFloatingHeart, i*120);
+  }
+  function stopHearts() {
+    if(heartInterval) clearInterval(heartInterval);
+  }
+
+  // ---------- MUSIC INTEGRATION (romantic ambient audio) ----------
+  // Using royalty-free / SoundHelix demo track (gentle instrumental)
+  const audio = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3");
+  audio.loop = true;
+  audio.volume = 0.35;
+  let musicPlaying = false;
+  const musicToggleBtn = document.getElementById("musicToggle");
+  const musicIcon = document.getElementById("musicIcon");
+  const musicStatusSpan = document.getElementById("musicStatus");
+
+  function toggleMusic() {
+    if (!musicPlaying) {
+      audio.play().then(() => {
+        musicPlaying = true;
+        musicIcon.className = "fas fa-volume-up";
+        musicStatusSpan.innerText = "Melody of Us";
+      }).catch(e => {
+        console.log("Audio play requires user interaction", e);
+        musicStatusSpan.innerText = "Tap to play";
+      });
+    } else {
+      audio.pause();
+      musicPlaying = false;
+      musicIcon.className = "fas fa-music";
+      musicStatusSpan.innerText = "Play Romance";
+    }
+  }
+  musicToggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMusic();
+  });
+  // auto attempt after first user global interaction (scan button) to meet policy 
+  function enableMusicAfterInteraction() {
+    if (!musicPlaying) {
+      toggleMusic();
+    }
+  }
+
+  // ---------- SCANNING SIMULATION (unlock premium experience) ----------
+  const lockScreenDiv = document.getElementById("lockScreen");
+  const unlockedDiv = document.getElementById("unlockedContent");
+  const scanBtn = document.getElementById("simulateScanBtn");
+  
+  // romantic reveal animation when unlocking (cinematic)
+  function unlockDigitalGift() {
+    if (lockScreenDiv.style.display === "none") return;
+    // create scanning + magical transition
+    lockScreenDiv.style.transition = "opacity 0.8s ease, transform 0.6s";
+    lockScreenDiv.style.opacity = "0";
+    lockScreenDiv.style.transform = "scale(0.95)";
+    setTimeout(() => {
+      lockScreenDiv.style.display = "none";
+      unlockedDiv.style.display = "block";
+      // activate floating hearts & notes rotation fully
+      startHearts();
+      // smooth scroll to top after reveal
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      // small confetti effect (romantic digital touch)
+      triggerRomanticConfetti();
+    }, 650);
+  }
+  
+  function triggerRomanticConfetti() {
+    // simple yet elegant digital confetti hearts (using canvas sometimes but add small DOM elements)
+    for (let i=0; i<35; i++) {
+      const confHeart = document.createElement("div");
+      confHeart.innerText = ['❤️','🩷','💖','✨','🌸'][Math.floor(Math.random()*5)];
+      confHeart.style.position = "fixed";
+      confHeart.style.left = Math.random() * window.innerWidth + "px";
+      confHeart.style.top = "50%";
+      confHeart.style.fontSize = (Math.random() * 24 + 16) + "px";
+      confHeart.style.pointerEvents = "none";
+      confHeart.style.zIndex = "999";
+      confHeart.style.opacity = "0.9";
+      confHeart.style.animation = "floatUpLove 1.2s forwards";
+      document.body.appendChild(confHeart);
+      setTimeout(() => confHeart.remove(), 1300);
+    }
+  }
+  
+  // add scanning simulation sound + imagery
+  scanBtn.addEventListener("click", () => {
+    // simulated haptic & scan effect
+    scanBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>  Unlocking memories...';
+    setTimeout(() => {
+      unlockDigitalGift();
+      // optional start music after unlock if user wants, but they can tap music widget
+      // but we also try to softly preload audio context
+      if (!musicPlaying) {
+        // try to play music after first gesture (good practice)
+        audio.play().then(() => {
+          musicPlaying = true;
+          musicIcon.className = "fas fa-volume-up";
+          musicStatusSpan.innerText = "Melody of Us";
+        }).catch(()=>{});
+      }
+    }, 800);
+  });
+  
+  // Unboxing reveal buttons for packaging mockup (feature)
+  const btn1 = document.getElementById("revealUnboxTip1");
+  const hint1 = document.getElementById("unboxHint1");
+  const btn2 = document.getElementById("revealUnboxTip2");
+  const hint2 = document.getElementById("unboxHint2");
+  const btn3 = document.getElementById("revealUnboxTip3");
+  const hint3 = document.getElementById("unboxHint3");
+  if(btn1) btn1.addEventListener("click", () => { hint1.style.display = hint1.style.display === "none" ? "block" : "none"; if(hint1.style.display==="block"){ hint1.style.animation="fadeIn 0.5s";} });
+  if(btn2) btn2.addEventListener("click", () => { hint2.style.display = hint2.style.display === "none" ? "block" : "none"; });
+  if(btn3) btn3.addEventListener("click", () => { hint3.style.display = hint3.style.display === "none" ? "block" : "none"; });
+  
+  // preload some extra floating background animations once content live
+  // additional animated gradient glow on gallery images
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeIn { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:translateY(0);} }
+    .photo-grid .gallery-item img { transition: transform 0.5s cubic-bezier(0.2,0.9,0.4,1.1);}
+    .mockup-card:hover { transform: translateY(-8px); background: rgba(35, 15, 25, 0.9); border-color: #ffbbaa; box-shadow: 0 20px 30px -10px rgba(0,0,0,0.5);}
+    .premium-card { animation: softGlow 3s infinite alternate; }
+    @keyframes softGlow { 0% { box-shadow: 0 15px 35px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,190,160,0.2) inset;} 100% { box-shadow: 0 25px 50px rgba(210,80,100,0.3), 0 0 0 2px rgba(255,160,140,0.6) inset;}}
+  `;
+  document.head.appendChild(style);
+  
+  // mobile-friendly adjustments, and initial hidden but if someone arrives already? just show lock screen
+  // ensure unlocked experience gets floating hearts later
+  // for safety also set some default notes
+  window.addEventListener("load", () => {
+    // make sure lock screen is visible
+    lockScreenDiv.style.display = "flex";
+    unlockedDiv.style.display = "none";
+    // stop hearts when locked, we will start after unlock.
+    stopHearts();
+    // Preload background ambiance
+    // create minimal periodic hearts for lock? Not necessary for concept, but we add small welcome hearts
+    const welcomeHeartInterval = setInterval(() => {
+      if(lockScreenDiv.style.display !== "none") createFloatingHeart();
+      else clearInterval(welcomeHeartInterval);
+    }, 3000);
+    // Simulate floating hearts on lock screen but few
+    setTimeout(() => {
+      if(lockScreenDiv.style.display !== "none") createFloatingHeart();
+    }, 500);
+  });
+  
+  // on gallery image click - romantic zoom-in effect (add lightbox inspiration)
+  document.addEventListener("click", (e) => {
+    if(e.target.closest(".gallery-item")) {
+      const imgElem = e.target.closest(".gallery-item").querySelector("img");
+      if(imgElem){
+        const tempDiv = document.createElement("div");
+        tempDiv.style.position = "fixed";
+        tempDiv.style.top = "0"; tempDiv.style.left = "0"; tempDiv.style.width = "100%"; tempDiv.style.height = "100%";
+        tempDiv.style.backgroundColor = "rgba(0,0,0,0.85)";
+        tempDiv.style.display = "flex"; tempDiv.style.alignItems = "center"; tempDiv.style.justifyContent = "center";
+        tempDiv.style.zIndex = "1000";
+        tempDiv.style.backdropFilter = "blur(12px)";
+        const bigImg = document.createElement("img");
+        bigImg.src = imgElem.src;
+        bigImg.style.maxWidth = "90%"; bigImg.style.maxHeight = "80%";
+        bigImg.style.borderRadius = "32px"; bigImg.style.boxShadow = "0 0 40px rgba(255,120,120,0.8)";
+        tempDiv.appendChild(bigImg);
+        tempDiv.onclick = () => tempDiv.remove();
+        document.body.appendChild(tempDiv);
+      }
+    }
+  });
+  
+  // small hint for packaging QR scanning demonstration text
+  console.log("✨ Premium Romantic Digital Gift loaded — ready to be scanned ✨");
+</script>
+</body>
+        </html> 
